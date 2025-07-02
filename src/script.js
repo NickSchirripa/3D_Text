@@ -22,7 +22,7 @@ const scene = new THREE.Scene();
 
 //Axes Helper
 const axesHelper = new THREE.AxesHelper();
-scene.add(axesHelper);
+//scene.add(axesHelper);
 
 /*
 FONTS
@@ -54,7 +54,13 @@ fontLoader.load("fonts/helvetiker_regular.typeface.json", (font) => {
   //);
   textGeometry.center();
   console.log(textGeometry.boundingBox);
-  const textMaterial = new THREE.MeshBasicMaterial({ wireframe: true });
+
+  //material for text mesh
+  const textMaterial = new THREE.MeshMatcapMaterial({
+    matcap: matcapTextureText,
+  });
+
+  //text mesh
   const text = new THREE.Mesh(textGeometry, textMaterial);
   scene.add(text);
 });
@@ -64,10 +70,46 @@ fontLoader.load("fonts/helvetiker_regular.typeface.json", (font) => {
  */
 const textureLoader = new THREE.TextureLoader();
 
+const matcapTexture = textureLoader.load("/textures/matcaps/1.png");
+matcapTexture.colorSpace = THREE.SRGBColorSpace;
+
+const matcapTextureDonut = textureLoader.load("/textures/matcaps/8.png");
+matcapTextureDonut.colorSpace = THREE.SRGBColorSpace;
+
+const matcapTextureText = textureLoader.load("/textures/matcaps/7.png");
+matcapTextureText.colorSpace = THREE.SRGBColorSpace;
+
 /**
  * Object
+ *
+ *
  */
+//time it takes for donuts to render you can use
+//console.time('whatever name you want here) and it will start there.
+// then end with console.timeEnd('same name you had for console.time)
+console.time("donut");
 
+const donutGeo = new THREE.TorusGeometry(0.3, 0.2, 20, 45);
+const donutMaterial = new THREE.MeshMatcapMaterial({
+  matcap: matcapTextureDonut,
+});
+
+for (let i = 0; i < 300; i++) {
+  const donut = new THREE.Mesh(donutGeo, donutMaterial);
+
+  donut.position.x = (Math.random() - 0.5) * 10;
+  donut.position.y = (Math.random() - 0.5) * 10;
+  donut.position.z = (Math.random() - 0.5) * 10;
+
+  donut.rotation.x = Math.random() * Math.PI;
+  donut.rotation.y = Math.random() * Math.PI;
+
+  const scale = Math.random();
+  donut.scale.set(scale, scale, scale);
+
+  scene.add(donut);
+}
+console.timeEnd("donut");
 /**
  * Sizes
  */
